@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horloge Analogique et Numérique</title>
+    <style>
+        body {
+            font-size: 62.5%;
+            margin: 1em;
+            background: #508ecb;
+        }
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        #watch {
+            font-size: 1em;
+            position: relative;
+        }
+        #watch .frame-face {
+            position: relative;
+            width: 30em;
+            height: 30em;
+            margin: 2em auto;
+            border-radius: 15em;
+            background: -webkit-linear-gradient(top, #f9f9f9, #666);
+            background: -moz-linear-gradient(top, #f9f9f9, #666);
+            background: linear-gradient(to bottom, #f9f9f9, #666);
+            box-shadow: rgba(0, 0, 0, .8) .5em .5em 4em;
+        }
+        #watch .minute-marks li {
+            display: block;
+            width: .2em;
+            height: .6em;
+            background: #929394;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -.4em 0 0 -.1em;
+        }
+        #watch .hours-hand, #watch .minutes-hand, #watch .seconds-hand {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: center center;
+            transition: transform 0.5s ease-in-out; /* Ajout de la transition fluide */
+        }
+        #watch .hours-hand {
+            width: .8em;
+            height: 7em;
+            border-radius: 0 0 .9em .9em;
+            background: #232425;
+            margin: 0 0 -.8em -.4em;
+            box-shadow: #232425 0 0 2px;
+        }
+        #watch .minutes-hand {
+            width: .8em;
+            height: 12.5em;
+            border-radius: .5em;
+            background: #343536;
+            margin: 0 0 -1.5em -.4em;
+            box-shadow: #343536 0 0 2px;
+        }
+        #watch .seconds-hand {
+            width: .2em;
+            height: 14em;
+            border-radius: .1em .1em 0 0/10em 10em 0 0;
+            background: #c00;
+            margin: 0 0 -2em -.1em;
+            box-shadow: rgba(0, 0, 0, .8) 0 0 .2em;
+        }
+        #watch .digital-wrap {
+            width: 9em;
+            height: 3em;
+            border: .1em solid #222;
+            border-radius: .2em;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: 3em 0 0 -4.5em;
+            overflow: hidden;
+            background: #4c4c4c;
+            background: linear-gradient(to bottom, #4c4c4c 0%, #0f0f0f 100%);
+        }
+        #watch .digital-wrap ul {
+            float: left;
+            width: 2.85em;
+            height: 3em;
+            border-right: .1em solid #000;
+            color: #ddd;
+            font-family: Consolas, monaco, monospace;
+        }
+        #watch .digital-wrap ul:last-child { border: none; }
+        #watch .digital-wrap li {
+            font-size: 1.5em;
+            line-height: 2;
+            letter-spacing: 2px;
+            text-align: center;
+            position: relative;
+            left: 1px;
+        }
+    </style>
+</head>
+<body>
+    <div id="watch">
+        <div class="frame-face">
+            <div class="hours-hand" id="hours-hand"></div>
+            <div class="minutes-hand" id="minutes-hand"></div>
+            <div class="seconds-hand" id="seconds-hand"></div>
+        </div>
+        <div class="digital-wrap">
+            <ul class="digit-hours">
+                <li id="digit-hours"></li>
+            </ul>
+            <ul class="digit-minutes">
+                <li id="digit-minutes"></li>
+            </ul>
+            <ul class="digit-seconds">
+                <li id="digit-seconds"></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+
+            // Convertir en degrés pour les aiguilles
+            const hoursDeg = (hours % 12) * 30 + (minutes / 60) * 30;
+            const minutesDeg = minutes * 6;
+            const secondsDeg = seconds * 6;
+
+            // Appliquer la rotation aux aiguilles
+            document.getElementById("hours-hand").style.transform = `rotate(${hoursDeg}deg)`;
+            document.getElementById("minutes-hand").style.transform = `rotate(${minutesDeg}deg)`;
+            document.getElementById("seconds-hand").style.transform = `rotate(${secondsDeg}deg)`;
+
+            // Mettre à jour l'affichage numérique
+            document.getElementById("digit-hours").textContent = hours < 10 ? '0' + hours : hours;
+            document.getElementById("digit-minutes").textContent = minutes < 10 ? '0' + minutes : minutes;
+            document.getElementById("digit-seconds").textContent = seconds < 10 ? '0' + seconds : seconds;
+        }
+
+        // Mettre à jour l'horloge chaque seconde
+        setInterval(updateClock, 1000);
+
+        // Appel initial pour afficher l'heure immédiatement
+        updateClock();
+    </script>
+</body>
+</html>
